@@ -1,0 +1,35 @@
+---
+
+- name: The relevance of the shortcut on the user's desktop
+  hosts: all  
+  become: True 
+  
+  tasks:
+  
+    - name: Installing the package shared-desktop-icons
+      package:
+        name: shared-desktop-icons
+        state: present
+         
+    - name: Сopying a shortcut
+      copy:
+        src: /usr/share/applications/blender.desktop
+        dest: /usr/share/Desktop/blender.desktop
+        mode: 0755
+        remote_src: True
+      register: mylink
+     
+    - name: Get all groups
+      ansible.builtin.getent:
+        database: group
+        split: ':'
+   
+    - set_fact:
+        var1: "{{ ansible_facts.getent_group.users[2].split(',') }}"  # искомая группа - users
+   
+    - name: Deleting a file HOME/.config/shared-desktop-icons/blender.desktop
+      file:
+        path: /home/{{ item }}/.config/shared-desktop-icons/blender.desktop
+        state: absent
+      loop:  "{{ var1 }}"
+      when: mylink.changed

@@ -1,0 +1,21 @@
+---
+install_packages:
+  - yandex-browser-stable
+  - virtualbox
+  - dbeaver
+  - codium
+  - mysql-workbench-community
+  - notepadqq
+  - veyon
+  - qt6-designer
+
+# Delete packages play
+remove_play:
+  - Kanagram
+  - Klotski
+  - Mahjongg
+  - wine-winemine
+  - sol
+  - Mines
+  - Tetravex
+  - nextcloud-client

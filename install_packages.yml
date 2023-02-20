@@ -1,0 +1,20 @@
+---
+- name: Software Deployment
+  hosts: all
+  become: true 
+  vars_files: vars/main.yml
+
+  tasks:
+
+# Install packages
+    - name: Install packages
+      apt_rpm:
+        name: '{{ install_packages }}'
+        state: present
+        update_cache: yes
+
+# Remove packages
+    - name: Remove play
+      apt_rpm:
+        name: '{{ remove_play }}'
+        state: absent

@@ -1,0 +1,6 @@
+[test]
+PC-TEST ansible_ssh_host=192.168.130.16 
+
+[test:vars]
+ansible_ssh_user=root 
+ansible_python_interpreter = /usr/bin/python3
