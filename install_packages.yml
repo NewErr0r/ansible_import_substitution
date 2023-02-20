@@ -6,12 +6,21 @@
 
   tasks:
 
-# Install packages
+# Install packages 'apt-get install <name>'
     - name: Install packages
       apt_rpm:
         name: '{{ install_packages }}'
         state: present
         update_cache: yes
+
+# Install packages 'epm play <name>'
+    - name: Install packages EPM
+      command: 
+        cmd: epm play '{{ item }}'
+      loop: 
+        - draw.io
+        - code
+        - sublime
 
 # Remove packages
     - name: Remove play

@@ -13,11 +13,30 @@
          
     - name: Сopying a shortcut
       copy:
-        src: /usr/share/applications/blender.desktop
-        dest: /usr/share/Desktop/blender.desktop
+        src: /usr/share/applications/{{ item }}.desktop
+        dest: /usr/share/Desktop/{{ item }}.desktop
         mode: 0755
         remote_src: True
       register: mylink
+      loop:
+        - blender
+        - chromium
+        - code
+        - codium
+        - codeblocks
+        - dbeaver
+        - drawio
+        - gimp
+        - idle3
+        - libreoffice-writer
+        - mysql-workbench
+        - notepadqq
+        - org.qt-project.qtcreator
+        - virtualbox
+        - sublime-text
+        - org.wireshark.Wireshark
+        - bluefish
+        - qt6-designer
      
     - name: Get all groups
       ansible.builtin.getent:
@@ -25,11 +44,11 @@
         split: ':'
    
     - set_fact:
-        var1: "{{ ansible_facts.getent_group.users[2].split(',') }}"  # искомая группа - users
+        var1: "{{ ansible_facts.getent_group.users[2].split(',') }}" 
    
-    - name: Deleting a file HOME/.config/shared-desktop-icons/blender.desktop
+    - name: Deleting a file HOME/.config/shared-desktop-icons/*.desktop
       file:
-        path: /home/{{ item }}/.config/shared-desktop-icons/blender.desktop
+        path: /home/{{ item }}/.config/shared-desktop-icons/{{ item }}.desktop
         state: absent
       loop:  "{{ var1 }}"
       when: mylink.changed

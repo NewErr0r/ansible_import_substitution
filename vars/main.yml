@@ -8,6 +8,8 @@ install_packages:
   - notepadqq
   - veyon
   - qt6-designer
+  - wireshark-base
+  - wireshark-qt5
 
 # Delete packages play
 remove_play:
@@ -19,3 +21,11 @@ remove_play:
   - Mines
   - Tetravex
   - nextcloud-client
+  - pidgin
+  - cantor
+  - basic256
+  - gambas3
+  - Fritzing
+  - fp
+  - lazarus
+  - PascalABCNETLinux
