@@ -1,7 +1,7 @@
 ---
 
 - name: The relevance of the shortcut on the user's desktop
-  hosts: all  
+  hosts: PC25-Teacher
   become: True 
   
   tasks:
@@ -52,3 +52,6 @@
         state: absent
       loop:  "{{ var1 }}"
       when: mylink.changed
+
+    - name: Reboot virtual machines
+      reboot:

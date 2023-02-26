@@ -1,0 +1,93 @@
+---
+- name: Creating a shared folder on PC-Teacher
+  hosts: teacher
+  become: true
+  vars_files: vars/creds.yml
+
+  tasks: 
+    - name: Install samba
+      apt_rpm:
+        name: samba
+        state: present
+        update_cache: yes
+
+    - name: Creating a user
+      user:
+        name: '{{ samba_user }}'
+        password: '{{ samba_pass }}'
+        home: /home/{{ samba_user }}
+
+    - name: Create a folder that will be shared, assign rights to it
+      file:
+        path: '{{ path_share_forled }}'
+        state: directory
+        mode: '0777'
+        recurse: yes
+        owner: '{{ samba_user }}'
+        group: users
+    
+    - name: Making a backup of the samba configuration file 
+      copy:
+        src: /etc/samba/smb.conf
+        dest: /etc/samba/smb.conf.old
+        remote_src: yes
+
+    - name: Adding a user to Samba
+      command: 
+        cmd: echo {{ samba_pass }};echo {{ samba_pass }} | smbpasswd -a {{ samba_user }}
+
+    - name: Create smb.conf
+      template: 
+        src: templates/smb.conf.j2
+        dest: /etc/samba/smb.conf
+        mode: '0644'
+
+    - name: Restart smb
+      service: 
+        name: '{{ item }}'
+        enabled: true 
+        state: restarted
+      loop:
+        - smb
+        - nmb
+
+- name: Configuring the auto-mounting of a shared folder
+  hosts: student
+  become: true 
+  vars_files: vars/creds.yml
+
+  tasks:
+    - name: Create a folder for mount 
+      file:
+        path: '{{ path_mount }}'
+        state: directory
+        mode: '0777'
+
+#    - name: Mount folder
+#      template:
+#        src: templates/rc.local.j2
+#        dest: /etc/rc.d/rc.local
+#
+#    - name: chmod
+#      command:
+#        cmd: chmod uga+x /etc/rc.d/rc.local
+
+    - name: Create file credn for smb
+      template:
+        src: templates/creds_mount.j2
+        dest: '{{ path_creds }}'
+        mode: '0600'
+        owner: root
+        group: 
+
+    - name: Add write fstab for mount
+      lineinfile:
+        dest: "/etc/fstab"
+        line: '{{ write_line }}'
+
+    - name: mount
+      command: 
+        cmd: mount -a
+
+    - name: Reboot virtual machines
+      reboot:

@@ -14,12 +14,15 @@
         update_cache: yes
 
 # Install packages 'epm play <name>'
+    - name: Install VSCode
+      command:
+        cmd: epm play code
+
     - name: Install packages EPM
       command: 
         cmd: epm play '{{ item }}'
       loop: 
         - draw.io
-        - code
         - sublime
 
 # Remove packages

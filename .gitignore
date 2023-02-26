@@ -1,2 +1,6 @@
 inventory/kab25/hosts
 ansible.cfg
+templates/smb.conf.j2
+templates/creds_mount.j2
+templates/rc.local.j2
+vars/creds.yml

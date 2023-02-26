@@ -1,6 +1,9 @@
-[test]
-PC-TEST ansible_ssh_host=192.168.0.113
+[teacher]
+PC-Teacher ansible_ssh_host=192.168.0.110
 
-[test:vars]
+[student]
+PC-Student ansible_ssh_host=192.168.0.111
+
+[all:vars]
 ansible_ssh_user=root 
 ansible_python_interpreter = /usr/bin/python3
